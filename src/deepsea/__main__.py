@@ -2,7 +2,7 @@
 import click
 import hydra
 from omegaconf import DictConfig, OmegaConf
-from .scraper.html import HtmlScraper
+from scraper.html import HtmlScraper
 
 
 @click.command()
