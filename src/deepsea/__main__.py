@@ -3,8 +3,8 @@ import click
 import hydra
 from omegaconf import DictConfig, OmegaConf
 
-# from scraper.html import HtmlScraper
-# from scraper.literal_click_option import LiteralOption
+# from scraper_.html import HtmlScraper
+# from scraper_.literal_click_option import LiteralOption
 
 
 @click.command(context_settings=dict(help_option_names=['-h', '--help']))
