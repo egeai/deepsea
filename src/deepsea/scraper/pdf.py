@@ -12,9 +12,9 @@ from dataclasses import dataclass
 
 @dataclass(slots=True)
 class Person:
-    name:str
-    address:str
-    email:str
+    name: str
+    address: str
+    email: str
 
 
 class PdfScraper:
