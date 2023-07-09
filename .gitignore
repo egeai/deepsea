@@ -17,5 +17,3 @@ __pycache__/
 .pre-commit-config.yaml
 .DS_Store
 
-# hide scraper_ code
-src/deepsea/scraper_
