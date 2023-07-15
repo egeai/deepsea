@@ -54,7 +54,7 @@ pyupgrade = "^2.29.1"
 furo = ">=2021.11.12"
 
 [tool.poetry.scripts]
-deepsea = "src.deepsea.__main__:main"
+deepsea = "src.deepsea.main:main"
 
 [tool.coverage.paths]
 source = ["src", "*/site-packages"]

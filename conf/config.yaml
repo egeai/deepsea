@@ -1,2 +1,16 @@
 params:
   url: 'https://imdb.com/chart/top/'
+
+  data_augmentation:
+    rotation_range: 30
+    width_shift_range: 30.0
+    height_shift_range: 30.0
+    shear_range: 10.0
+    zoom_range: 0.2
+    horizontal_flip: True
+    vertical_flip: False
+    preprocessing_function: preprocess_input
+
+
+
+
