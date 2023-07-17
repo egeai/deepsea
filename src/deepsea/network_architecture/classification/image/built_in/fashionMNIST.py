@@ -1,3 +1,10 @@
+"""
+Source Code:
+Title: Deep Learning - Convolutional Neural Networks with TensorFlow
+Publisher: Packt
+By Lazy Programmer
+"""
+
 import tensorflow as tf
 
 import numpy as np

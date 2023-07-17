@@ -1,3 +1,10 @@
+"""
+Source Code:
+Title: Deep Learning - Convolutional Neural Networks with TensorFlow
+Publisher: Packt
+By Lazy Programmer
+"""
+
 import tensorflow as tf
 
 # additional imports
@@ -153,3 +160,4 @@ def plot_confusion_matrix(cm, classes,
 
     # Now that the model is so large, it's useful to summarize
     model.summary()
+
