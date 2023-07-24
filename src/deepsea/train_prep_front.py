@@ -3,9 +3,7 @@ This Streamlit page is to prepare the data to the train process.
 """
 
 import streamlit as st
-import pandas as pd
-import numpy as np
-from network_architecture.classification.image import load_data
+from network_architecture.classification.image.fine_tuning.FashionClassification import clothes_classification
 
 
 def main():
@@ -21,6 +19,8 @@ def main():
 
     if st.sidebar.checkbox("Show raw data", False):
         st.subheader("Mushroom data set(Classification)")
+
+    clothes_classification.main()
 
 
 if __name__ == "__main__":

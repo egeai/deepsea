@@ -1,0 +1,15 @@
+version: '1.0'
+services:
+  deepsea-web:
+    build: .
+    ports:
+      - "8501:8501"
+    volumes:
+      - .:/app
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]

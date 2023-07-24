@@ -9,6 +9,8 @@
 /docs/_build/
 /src/*.egg-info/
 /outputs/
+/models
+xception_*
 __pycache__/
 .idea
 .gitattributes
