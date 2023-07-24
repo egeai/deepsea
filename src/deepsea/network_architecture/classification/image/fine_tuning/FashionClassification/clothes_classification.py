@@ -75,7 +75,6 @@ def make_model(learning_rate, droprate):
 
 def evaluate_model():
     model = keras.models.load_model('/app/xception_v1_06_0.845.h5')
-                                    # xception_v4_large_08_0.894.h5')
     test_gen = ImageDataGenerator(
         preprocessing_function=preprocess_input
     )
@@ -89,26 +88,18 @@ def evaluate_model():
 
     model.evaluate(test_ds)
 
-    print("Naber abi 1")
-
     img_path = "/app/data/clothing-dataset-small/test/pants/c8d21106-bbdb-4e8d-83e4-bf3d14e54c16.jpg"
 
     img = load_img(img_path, target_size=(150, 150))
-    print(img)
-    print("Naber abi 2")
 
     # preprocess the image
     x = np.array(img)
     myX = np.array([x])
     myX = preprocess_input(myX)
 
-    print("Naber abi 3")
-
     # get the prediction
     pred = model.predict(myX)
     print("pred 0:", pred[0])
-
-    print("Naber abi 4")
 
     labels = {
         0: 'dress',
