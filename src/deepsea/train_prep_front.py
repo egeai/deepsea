@@ -4,6 +4,8 @@ This Streamlit page is to prepare the data to the train process.
 
 import streamlit as st
 from network_architecture.classification.image.fine_tuning.FashionClassification import clothes_classification
+from network_architecture.classification.image.basic.cats_vs_dogs import img_class_organizer
+from network_architecture.classification.image.basic.cats_vs_dogs import convnet_model
 
 
 def main():
@@ -20,7 +22,25 @@ def main():
     if st.sidebar.checkbox("Show raw data", False):
         st.subheader("Mushroom data set(Classification)")
 
-    clothes_classification.main()
+    # clothes_classification.main()
+
+    # this is for re-organizing cats and dogs images according to train, validation and test
+    # img_class_organizer.main()
+
+    model = convnet_model.model()
+    print(model.summary())
+
+
+
+    """
+        model.compile(
+        optimizer="adam",
+        "categorical_crossentropy"
+        metrics=["accuracy"]
+    )
+    """
+
+
 
 
 if __name__ == "__main__":
