@@ -57,3 +57,4 @@ setuptools~=65.4.1
 zipp~=3.16.0
 filelock~=3.9.0
 scipy~=1.10.1
+matplotlib~=3.7.2
