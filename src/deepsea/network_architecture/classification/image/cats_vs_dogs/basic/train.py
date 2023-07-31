@@ -5,8 +5,7 @@ import matplotlib.pyplot as plt
 import keras
 from tensorflow.keras.utils import image_dataset_from_directory
 
-from .convnet_model import make_model
-from tensorflow.keras import layers
+from src.deepsea.network_architecture.classification.image.cats_vs_dogs.basic.convnet_model import make_model
 
 new_base_dir = pathlib.Path("/app/data/cats_vs_dogs_small/")
 

@@ -3,7 +3,7 @@ This Streamlit page is to prepare the data to the train process.
 """
 
 import streamlit as st
-from network_architecture.classification.image.basic.cats_vs_dogs import train
+from src.deepsea.network_architecture.classification.image.cats_vs_dogs.basic import train
 
 
 def main():
