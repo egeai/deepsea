@@ -1,31 +1,12 @@
-import pathlib
-
 import matplotlib.pyplot as plt
-
 import keras
-from tensorflow.keras.utils import image_dataset_from_directory
 
-from src.deepsea.network_architecture.classification.image.cats_vs_dogs.basic.convnet_model import make_model
-
-new_base_dir = pathlib.Path("/app/data/cats_vs_dogs_small/")
-
-
-def create_datasets():
-    train_dataset = image_dataset_from_directory(
-        new_base_dir / "train",
-        image_size=(180, 180),
-        batch_size=32,
-    )
-    validation_dataset = image_dataset_from_directory(
-        new_base_dir / "validation",
-        image_size=(180, 180),
-        batch_size=32,
-    )
-    test_dataset = image_dataset_from_directory(
-        new_base_dir / "test", image_size=(180, 180), batch_size=32
-    )
-
-    return train_dataset, validation_dataset, test_dataset
+from src.deepsea.network_architecture.classification.image.cats_vs_dogs.helpers import (
+    functions,
+)
+from src.deepsea.network_architecture.classification.image.cats_vs_dogs.basic.convnet_model import (
+    make_model,
+)
 
 
 def cats_vs_dogs():
@@ -37,7 +18,8 @@ def cats_vs_dogs():
         )
     ]
 
-    train_dataset, validation_dataset, test_dataset = create_datasets()
+    train_dataset = functions.create_dataset("train")
+    validation_dataset = functions.create_dataset("validation")
 
     model = make_model()
 
@@ -68,6 +50,6 @@ def cats_vs_dogs():
 
 def evaluate():
     test_model = keras.models.load_model("/app/models/14_0.485.k")
-    _, _, test_dataset = create_datasets()
+    test_dataset = functions.create_dataset("test")
     test_loss, test_acc = test_model.evaluate(test_dataset)
     print(f"Test accuracy: {test_acc:.3f}")

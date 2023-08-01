@@ -3,7 +3,13 @@ This Streamlit page is to prepare the data to the train process.
 """
 
 import streamlit as st
-from src.deepsea.network_architecture.classification.image.cats_vs_dogs.basic import train
+
+# from src.deepsea.network_architecture.classification.image.cats_vs_dogs.basic import (
+#    train,
+# )
+from network_architecture.classification.image.cats_vs_dogs.feature_extraction_from_pretrained import (
+    fast_feat_extract_without_augmentation,
+)
 
 
 def main():
@@ -26,7 +32,8 @@ def main():
     # img_class_organizer.main()
 
     # train.cats_vs_dogs()
-    train.evaluate()
+    # train.evaluate()
+    fast_feat_extract_without_augmentation.run()
 
 
 if __name__ == "__main__":
