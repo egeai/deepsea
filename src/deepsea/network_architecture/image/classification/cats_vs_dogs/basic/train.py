@@ -1,10 +1,10 @@
 import matplotlib.pyplot as plt
 import keras
 
-from src.deepsea.network_architecture.classification.image.cats_vs_dogs.helpers import (
+from src.deepsea.network_architecture.image.classification.cats_vs_dogs.helpers import (
     functions,
 )
-from src.deepsea.network_architecture.classification.image.cats_vs_dogs.basic.convnet_model import (
+from src.deepsea.network_architecture.image.classification.cats_vs_dogs.basic.convnet_model import (
     make_model,
 )
 
