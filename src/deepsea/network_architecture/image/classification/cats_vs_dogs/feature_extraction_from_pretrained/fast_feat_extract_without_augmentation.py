@@ -37,7 +37,7 @@ def _train_fit(model, train_features, train_labels, val_features, val_labels):
     model.compile(loss="binary_crossentropy", optimizer="rmsprop", metrics=["accuracy"])
     callbacks = [
         keras.callbacks.ModelCheckpoint(
-            filepath="/app/models/feture_extraction_{epoch:02d}_{val_loss:.3f}.krs",
+            filepath="/app/models/feature_extraction_without_augmentation{epoch:02d}_{val_loss:.3f}.krs",
             save_best_only=True,
             monitor="val_loss",
         )

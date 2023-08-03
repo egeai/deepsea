@@ -7,8 +7,9 @@ import streamlit as st
 # from src.deepsea.network_architecture.classification.image.cats_vs_dogs.basic import (
 #    train,
 # )
-from src.deepsea.network_architecture.image.classification.cats_vs_dogs.feature_extraction_from_pretrained import (
+from network_architecture.image.classification.cats_vs_dogs.feature_extraction_from_pretrained import (
     fast_feat_extract_without_augmentation,
+    feat_extract_with_augmentation,
 )
 
 
@@ -33,7 +34,8 @@ def main():
 
     # train.cats_vs_dogs()
     # train.evaluate()
-    fast_feat_extract_without_augmentation.run()
+    # fast_feat_extract_without_augmentation.run()
+    feat_extract_with_augmentation.run()
 
 
 if __name__ == "__main__":
