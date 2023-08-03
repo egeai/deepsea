@@ -17,14 +17,15 @@ from tqdm import tqdm
 
 class ImageCaptionFeatureExtractor(object):
     def __init__(
-        self,
-        output_path,
-        start_token="beginsequence",
-        end_token="endsequence",
-        feature_extractor=None,
-        input_shape=(224, 224, 3),
+            self,
+            output_path,
+            start_token="beginsequence",
+            end_token="endsequence",
+            feature_extractor=None,
+            input_shape=(224, 224, 3),
     ):
         self.input_shape = input_shape
+
         if feature_extractor is None:
             input = keras.Input(shape=input_shape)
             self.feature_extractor = keras.applications.vgg16.VGG16(
@@ -108,5 +109,67 @@ class ImageCaptionFeatureExtractor(object):
         for _, data in tqdm(mapping.items()):
             feature = data["features"]
             caption = data["caption"]
-            seq = self.tokenizer.texts_to_sequences([caption])
-            seq = seq[0]
+
+            seq, = self.tokenizer.texts_to_sequences([caption])
+
+            for i in range(1, len(seq)):
+                input_seq = seq[:i]
+                input_seq, = pad_sequence([input_seq],
+                                          self.max_seq_length)
+                # One-Hot Encoding
+                out_seq = seq[i]
+                out_seq = to_categorical([out_seq],
+                                         num_classes)[0]
+                in_feats.append(feature)
+                in_seqs.append(input_seq)
+                out_seq.append(out_seq)
+
+            file_paths = [
+                f'{self.output_path}/input_features.pickle',
+                f'{self.output_path}/input_sequence.pickle',
+                f'{self.output_path}/output_sequence.pickle']
+            sequences = [in_feats,
+                         in_seqs,
+                         out_seqs]
+
+            for path, seq in zip(file_paths, sequences):
+                with open(path, 'wb') as f:
+                    pickle.dump(np.array(seq), f, protocol=4)
+
+
+BASE_PATH = (pathlib.Path.home() / '.keras' / 'datasets' / 'flickr8k')
+IMAGES_PATH = str(BASE_PATH / 'Images')
+CAPTIONS_PATH = str(BASE_PATH / 'captions.txt')
+
+extractor = ImageCaptionFeatureExtractor(output_path='.')
+
+image_paths = list(glob.glob(f'{IMAGES_PATH}/*.jpg'))
+
+with open(CAPTIONS_PATH, 'r') as f:
+    text = f.read()
+    lines = text.split('\n')
+
+mapping = {}
+for line in lines:
+    if '.jpg' not in line:
+        continue
+    tokens = line.split(',', maxsplit=1)
+
+    if len(line) < 2:
+        continue
+
+    image_id, image_caption = tokens
+    image_id = image_id.split('.')[0] # Remove filename from image id
+
+    captions_per_image = mapping.get(image_id, [])
+    captions_per_image.append(image_caption)
+
+    mapping[image_id] = captions_per_image
+
+captions = []
+for image_path in image_paths:
+    image_id = image_path.split('/')[-1].split('.')[0]
+
+    captions.append(mapping[image_id][0])
+
+extractor.extract_features(image_paths, captions)
