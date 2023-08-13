@@ -99,3 +99,7 @@ class SimpleChatBot:
             pad_sequences(Xq, maxlen=self.max_question_length),
             np.array(Y),
         )
+
+    def vectorize_train_test(self):
+        inputs_train, queries_train, answer_train = self.vectorize_stories(self.train_data)
+        input_test, queries_test, answer_test = self.vectorize_stories(self.test_data)
