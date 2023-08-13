@@ -1,6 +1,8 @@
 import pickle
 import numpy as np
+import matplotlib.pyplot as plt
 from keras.models import Sequential, Model
+from keras.src.callbacks import History
 from tensorflow.keras.layers import Embedding
 from keras.layers import (
     Input,
@@ -100,6 +102,91 @@ class SimpleChatBot:
             np.array(Y),
         )
 
-    def vectorize_train_test(self):
-        inputs_train, queries_train, answer_train = self.vectorize_stories(self.train_data)
-        input_test, queries_test, answer_test = self.vectorize_stories(self.test_data)
+    def model(self):
+        # Vectorize train and test
+        inputs_train, queries_train, answer_train = self.vectorize_stories(
+            self.train_data
+        )
+        inputs_test, queries_test, answer_test = self.vectorize_stories(self.test_data)
+
+        input_sequence = Input((self.max_story_length,))
+        question = Input((self.max_question_length,))
+
+        vocab_size = len(self.vocab) + 1
+
+        # Encoder
+        input_encoder_m = Sequential()
+        input_encoder_m.add(Embedding(input_dim=vocab_size, output_dim=64))
+        input_encoder_m.add(Dropout(0.3))
+
+        input_encoder_c = Sequential()
+        input_encoder_c.add(
+            Embedding(input_dim=vocab_size, output_dim=self.max_question_length)
+        )
+        input_encoder_c.add(Dropout(0.3))
+
+        question_encoder = Sequential()
+        question_encoder.add(
+            Embedding(
+                input_dim=vocab_size,
+                output_dim=64,
+                input_length=self.max_question_length,
+            )
+        )
+        question_encoder.add(Dropout(0.3))
+
+        input_encoded_m = input_encoder_m(input_sequence)
+        input_encoded_c = input_encoder_c(input_sequence)
+        question_encoded = question_encoder(question)
+
+        match = dot([input_encoded_m, question_encoded], axes=(2, 2))
+        match = Activation("softmax")(match)
+
+        response = add([match, input_encoded_c])
+        response = Permute((2, 1))(response)
+
+        answer = concatenate([response, question_encoded])
+        answer = LSTM(32)(answer)
+        answer = Dropout(0.5)
+        answer = Dense(vocab_size)(answer)
+        answer = Activation("softmax")(answer)
+
+        # Building Model
+        model = Model([input_sequence, question], answer)
+        model.compile(
+            optimizer="rmsprop", loss="categorical_crossentropy", metrics=["accuracy"]
+        )
+        # model.summary()
+        history = model.fit(
+            [inputs_train, queries_train],
+            answer_train,
+            batch_size=32,
+            epochs=25,
+            validation_data=([inputs_test, queries_test], answer_test),
+        )
+
+        self.plot_result(history=history)
+
+        pred_results = model.predict(([inputs_test, queries_test]))
+        val_max = np.argmax(pred_results[0])
+        for key, value in self.tokenizer.word_index.items():
+            if value == val_max:
+                k = key # answer: no
+
+
+    def plot_result(self, history: History) -> None:
+        acc = history.history["accuracy"]
+        val_acc = history.history["val_accuracy"]
+        loss = history.history["loss"]
+        val_loss = history.history["val_loss"]
+        epochs = range(1, len(acc) + 1)
+        plt.plot(epochs, acc, "bo", label="Training accuracy")
+        plt.plot(epochs, val_acc, "b", label="Validation accuracy")
+        plt.title("Training and validation accuracy")
+        plt.legend()
+        plt.figure()
+        plt.plot(epochs, loss, "bo", label="Training loss")
+        plt.plot(epochs, val_loss, "b", label="Validation loss")
+        plt.title("Training and validation loss")
+        plt.legend()
+        plt.show()
